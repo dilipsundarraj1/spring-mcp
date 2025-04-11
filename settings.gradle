@@ -1,0 +1,9 @@
+rootProject.name = 'spring-mcp'
+
+// Include child projects and their submodules
+include 'mcp-webflux'
+include 'mcp-webflux:mcp-server'
+include 'mcp-webflux:mcp-client'
+include 'mcp-webmcv'
+include 'mcp-webmcv:mcp-server'
+include 'mcp-webmcv:mcp-client'
