@@ -1,0 +1,3 @@
+curl -i http://localhost:8084/
+
+curl -X GET "http://localhost:8086/persons/nationality/American" -H "Content-Type: application/json"
