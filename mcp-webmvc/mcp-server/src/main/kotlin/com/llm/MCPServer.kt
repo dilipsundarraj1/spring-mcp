@@ -1,4 +1,5 @@
 package com.llm
+import com.llm.controller.PersonController
 import com.llm.entity.Person
 import com.llm.jpa.PersonRepository
 import com.llm.tools.PersonTools
@@ -44,6 +45,7 @@ class MCPServer {
             .toolObjects(personTools)
             .build()
     }
+
 }
 
 val log: Logger = LoggerFactory

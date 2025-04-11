@@ -1,3 +1,14 @@
 curl -i http://localhost:8084/
 
 curl -X GET "http://localhost:8086/persons/nationality/American" -H "Content-Type: application/json"
+
+curl -X GET "http://localhost:8086/persons/nationality/France" -H "Content-Type: application/json"
+
+
+curl -X GET "http://localhost:8086/persons/nationality/India" -H "Content-Type: application/json"
+
+
+curl -N -H "Accept: text/event-stream" http://localhost:8086/mcp/message
+
+
+curl -X GET http://localhost:8080/tools

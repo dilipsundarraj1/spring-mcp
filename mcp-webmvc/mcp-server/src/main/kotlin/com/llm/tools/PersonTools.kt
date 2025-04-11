@@ -24,8 +24,9 @@ class PersonTools(private val personRepository: PersonRepository) {
         @ToolParam(description = "Nationality") nationality: String?
     ): List<Person>? {
         log.info("getPersonsByNationality Nationality param : {} ", nationality)
-
-        return personRepository.findByNationality(nationality)
+        val response = personRepository.findByNationality(nationality)
+        log.info("Tool response : {} ", response)
+        return response
     }
 
     companion object {

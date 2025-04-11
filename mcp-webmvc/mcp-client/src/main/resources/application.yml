@@ -1,13 +1,15 @@
 server:
   port: 8086
 logging.level.org.springframework.ai: DEBUG
+logging.level.io.modelcontextprotocol.server: DEBUG
 spring:
   ai:
     mcp:
       client:
         type: SYNC
+        initialized: true
+        request-timeout: 240s
         sse:
-          transport-mode : WEB
           connections:
             person-mcp-server:
               url: http://localhost:8085

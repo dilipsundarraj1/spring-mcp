@@ -1,10 +1,12 @@
 package com.llm.controller
 
+import io.modelcontextprotocol.client.McpSyncClient
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.ai.chat.client.ChatClient
 import org.springframework.ai.chat.model.ChatResponse
 import org.springframework.ai.chat.prompt.PromptTemplate
+import org.springframework.ai.mcp.SyncMcpToolCallbackProvider
 import org.springframework.ai.tool.ToolCallbackProvider
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -18,15 +20,21 @@ import java.util.Map
 @RequestMapping("/persons")
 class PersonController(
     chatClientBuilder: ChatClient.Builder,
-    tools: ToolCallbackProvider
+    tools: ToolCallbackProvider,
+    mcpClients: List<McpSyncClient>
 ) {
+
     private val chatClient: ChatClient = chatClientBuilder
-        .defaultTools(tools)
+//        .defaultTools(tools)
+        .defaultTools( SyncMcpToolCallbackProvider(mcpClients))
         .build()
 
     @GetMapping("/nationality/{nationality}")
     fun findByNationality(@PathVariable nationality: String): String? {
+
+
         log.info("nationality : {} ", nationality)
+
 
         val pt = PromptTemplate(
             """
