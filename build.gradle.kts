@@ -26,8 +26,7 @@ subprojects {
     apply(plugin = "org.springframework.boot")
     apply(plugin = "io.spring.dependency-management")
 
-    // Set an extra property "springAiVersion"
-    extra["springAiVersion"] = "1.0.0-M6"
+    extra["springAiVersion"] = "1.0.0-M7"
 
     java {
         sourceCompatibility = JavaVersion.VERSION_21

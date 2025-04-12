@@ -2,6 +2,7 @@ package com.llm.controller
 
 import com.llm.entity.Person
 import com.llm.jpa.PersonRepository
+import com.llm.tools.PersonTools
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.ai.tool.annotation.ToolParam
@@ -10,7 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-class PersonController(private val personRepository: PersonRepository) {
+class PersonController(private val persontools: PersonTools) {
     companion object {
         private val log: Logger = LoggerFactory
             .getLogger(PersonController::class.java)
@@ -20,7 +21,7 @@ class PersonController(private val personRepository: PersonRepository) {
     @GetMapping("/person/{id}")
     fun getPersonById(@PathVariable @ToolParam(description = "Person ID") id: Long): Person? {
         log.info("getPersonById Person ID param : {} ", id)
-        return personRepository.findById(id).orElse(null)
+        return persontools.getPersonById(id)
     }
 
 

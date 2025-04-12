@@ -6,6 +6,7 @@ spring:
   ai:
     mcp:
       client:
+        enabled: true
         type: SYNC
         initialized: true
         request-timeout: 240s

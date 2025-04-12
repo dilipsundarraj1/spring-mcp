@@ -18,7 +18,7 @@ repositories {
     mavenCentral()
 }
 
-extra["springAiVersion"] = "1.0.0-M6"
+//extra["springAiVersion"] = "1.0.0-M6"
 
 dependencies {
 
@@ -26,7 +26,8 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
 
     //mcp
-    implementation("org.springframework.ai:spring-ai-mcp-server-webmvc-spring-boot-starter")
+    implementation("org.springframework.ai:spring-ai-starter-mcp-server")
+    implementation("org.springframework.ai:spring-ai-starter-mcp-server-webmvc")
 
 
     //kotlin

@@ -18,14 +18,17 @@ repositories {
     mavenCentral()
 }
 
-extra["springAiVersion"] = "1.0.0-M6"
+//extra["springAiVersion"] = "1.0.0-M6"
 
 dependencies {
 
     // webflux
     implementation("org.springframework.boot:spring-boot-starter-web")
-    implementation("org.springframework.ai:spring-ai-mcp-client-spring-boot-starter")
-    implementation("org.springframework.ai:spring-ai-openai-spring-boot-starter")
+    implementation("org.springframework.ai:spring-ai-starter-mcp-client")
+    implementation("org.springframework.ai:spring-ai-starter-model-openai")
+
+    //validation
+    implementation("org.springframework.boot:spring-boot-starter-validation")
 
 
     //kotlin

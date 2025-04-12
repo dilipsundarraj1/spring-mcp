@@ -1,69 +1,53 @@
 package com.llm.controller
 
+import com.llm.dtos.UserInput
 import io.modelcontextprotocol.client.McpSyncClient
+import io.modelcontextprotocol.spec.McpSchema
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.ai.chat.client.ChatClient
-import org.springframework.ai.chat.model.ChatResponse
-import org.springframework.ai.chat.prompt.PromptTemplate
 import org.springframework.ai.mcp.SyncMcpToolCallbackProvider
-import org.springframework.ai.tool.ToolCallbackProvider
 import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RestController
-import reactor.core.publisher.Flux
-import reactor.core.scheduler.Schedulers
-import java.util.Map
+import javax.validation.Valid
 
 @RestController
-@RequestMapping("/persons")
 class PersonController(
-    chatClientBuilder: ChatClient.Builder,
-    tools: ToolCallbackProvider,
-    mcpClients: List<McpSyncClient>
+    private val chatClientBuilder: ChatClient.Builder,
+    private val mcpClients: List<McpSyncClient>
 ) {
 
     private val chatClient: ChatClient = chatClientBuilder
-//        .defaultTools(tools)
-        .defaultTools( SyncMcpToolCallbackProvider(mcpClients))
+        .defaultTools(SyncMcpToolCallbackProvider(mcpClients))
         .build()
 
-    @GetMapping("/nationality/{nationality}")
-    fun findByNationality(@PathVariable nationality: String): String? {
 
+    @PostMapping("/v1/chats")
+    fun chat(@RequestBody @Valid userInput: UserInput): String? {
+        log.info("userInput message : {} ", userInput)
+        val requestSpec: ChatClient.ChatClientRequestSpec =
+            chatClient.prompt()
+                .user(userInput.prompt)
 
-        log.info("nationality : {} ", nationality)
+        log.info("requestSpec : {} ", requestSpec)
 
-
-        val pt = PromptTemplate(
-            """
-                Find persons with {nationality} nationality.
-                
-                """.trimIndent()
-        )
-        val p = pt.create(Map.of<String, Any>("nationality", nationality))
-        val response =  chatClient.prompt(p)
-            .call();
-
-        log.info("response: $response")
-        return response.content()
+        val responseSpec = requestSpec.call()
+        log.info("responseSpec1 : {} ", responseSpec)
+        log.info("content : {} ", responseSpec.content())
+        return responseSpec.content()
     }
 
+    @GetMapping("/tools")
+    fun tools(): List<McpSchema.ListToolsResult> {
+        mcpClients.
+            forEach { client ->
 
-    @GetMapping("/count-by-nationality/{nationality}")
-    fun countByNationality(@PathVariable nationality: String): Flux<ChatResponse> {
-        val pt = PromptTemplate(
-            """
-                How many persons come from {nationality} ?
-                
-                """.trimIndent()
-        )
-        val p = pt.create(Map.of<String, Any>("nationality", nationality))
-        return chatClient.prompt(p)
-            .stream()
-            .chatResponse()
-            .subscribeOn(Schedulers.boundedElastic())
+                log.info("serverInfo : {} , tools : {} ", client.serverInfo, client.listTools())
+            }
+
+        return mcpClients.map { it.listTools() }
     }
 
     companion object {
