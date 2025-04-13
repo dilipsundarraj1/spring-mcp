@@ -1,9 +1,7 @@
-package com.llm.controller
+package com.llm.tools
 
-import org.springframework.ai.model.function.FunctionCallback
 import org.springframework.ai.tool.ToolCallback
 import org.springframework.ai.tool.ToolCallbackProvider
-import org.springframework.ai.tool.ToolCallbacks
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RestController
 
@@ -12,13 +10,18 @@ import org.springframework.web.bind.annotation.RestController
 class ToolsController(
     private val toolCallbackProvider: ToolCallbackProvider
 ) {
-
     @GetMapping("/tools")
-    fun tools(): Array<out FunctionCallback> {
+    fun tools(): Tools {
 
-        return toolCallbackProvider
+        val toolList = toolCallbackProvider
             .toolCallbacks
+            .map { it as ToolCallback }
+
+        return Tools(toolList.size, toolList)
     }
-
-
 }
+
+data class Tools(
+    val totalNoOfTools: Int,
+    val tool: List<ToolCallback> = emptyList()
+)

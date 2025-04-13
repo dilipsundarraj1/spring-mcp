@@ -38,13 +38,6 @@ class HTTPFilter : OncePerRequestFilter() {
     ) {
         try {
             log.info("SSE connection request from: ${request.remoteAddr}, URI: ${request.requestURI}")
-            request.headerNames.asSequence()
-                .iterator()
-                .forEach { headerName ->
-                    log.info("Header: $headerName = ${request.getHeader(headerName)}")
-                }
-//            response.setHeader("Cache-Control", "no-cache")
-//            response.setHeader("X-Accel-Buffering", "no")
             filterChain.doFilter(request, response)
         } catch (ex: Exception) {
             log.error("Error in SSE filter: ", ex)

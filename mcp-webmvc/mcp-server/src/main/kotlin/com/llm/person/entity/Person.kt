@@ -1,4 +1,4 @@
-package com.llm.entity
+package com.llm.person.entity
 
 import jakarta.persistence.*
 

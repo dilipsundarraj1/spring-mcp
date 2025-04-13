@@ -1,0 +1,83 @@
+{
+  "_type": "export",
+  "__export_format": 4,
+  "resources": [
+    {
+      "_id": "reqGroup_ProductAPI",
+      "_type": "request_group",
+      "name": "Product API",
+      "parentId": null
+    },
+    {
+      "_id": "req_GetProductById",
+      "_type": "request",
+      "parentId": "reqGroup_ProductAPI",
+      "name": "Get Product by ID",
+      "method": "GET",
+      "url": "http://localhost:8080/api/product/:id",
+      "body": {},
+      "parameters": [],
+      "headers": []
+    },
+    {
+      "_id": "req_GetAllProducts",
+      "_type": "request",
+      "parentId": "reqGroup_ProductAPI",
+      "name": "Get All Products",
+      "method": "GET",
+      "url": "http://localhost:8080/api/product",
+      "body": {},
+      "parameters": [],
+      "headers": []
+    },
+    {
+      "_id": "req_CreateProduct",
+      "_type": "request",
+      "parentId": "reqGroup_ProductAPI",
+      "name": "Create Product",
+      "method": "POST",
+      "url": "http://localhost:8080/api/product",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"name\": \"Sample Product\",\n  \"description\": \"This is a sample product\",\n  \"price\": 99.99,\n  \"category\": \"General\"\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ]
+    },
+    {
+      "_id": "req_UpdateProduct",
+      "_type": "request",
+      "parentId": "reqGroup_ProductAPI",
+      "name": "Update Product",
+      "method": "PUT",
+      "url": "http://localhost:8080/api/product/:id",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"name\": \"Updated Product\",\n  \"description\": \"This is an updated product\",\n  \"price\": 109.99,\n  \"category\": \"General\"\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ]
+    },
+    {
+      "_id": "req_DeleteProduct",
+      "_type": "request",
+      "parentId": "reqGroup_ProductAPI",
+      "name": "Delete Product",
+      "method": "DELETE",
+      "url": "http://localhost:8080/api/product/:id",
+      "body": {},
+      "parameters": [],
+      "headers": []
+    }
+  ]
+}

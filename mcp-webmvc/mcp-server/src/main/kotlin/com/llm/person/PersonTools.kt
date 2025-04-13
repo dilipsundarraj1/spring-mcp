@@ -1,7 +1,7 @@
-package com.llm.tools
+package com.llm.person
 
-import com.llm.entity.Person
-import com.llm.jpa.PersonRepository
+import com.llm.person.entity.Person
+import com.llm.person.jpa.PersonRepository
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.ai.tool.annotation.Tool

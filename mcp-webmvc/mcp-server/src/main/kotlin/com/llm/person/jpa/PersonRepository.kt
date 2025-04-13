@@ -1,6 +1,6 @@
-package com.llm.jpa
+package com.llm.person.jpa
 
-import com.llm.entity.Person
+import com.llm.person.entity.Person
 import org.springframework.data.repository.CrudRepository
 
 interface PersonRepository : CrudRepository<Person, Long> {

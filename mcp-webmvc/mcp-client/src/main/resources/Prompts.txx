@@ -15,3 +15,12 @@ General Prompts: |
 {
     "prompt": "Find persons with USA nationality."
 }
+
+{
+    "prompt": "What is the product with the id 1 ?."
+}
+
+
+{
+    "prompt": "Find me all the phones ?"
+}

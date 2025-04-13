@@ -2,19 +2,17 @@ package com.llm.controller
 
 import com.llm.dtos.UserInput
 import io.modelcontextprotocol.client.McpSyncClient
-import io.modelcontextprotocol.spec.McpSchema
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.ai.chat.client.ChatClient
 import org.springframework.ai.mcp.SyncMcpToolCallbackProvider
-import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RestController
 import javax.validation.Valid
 
 @RestController
-class PersonController(
+class ChatsController(
     private val chatClientBuilder: ChatClient.Builder,
     private val mcpClients: List<McpSyncClient>
 ) {
@@ -39,19 +37,9 @@ class PersonController(
         return responseSpec.content()
     }
 
-    @GetMapping("/tools")
-    fun tools(): List<McpSchema.ListToolsResult> {
-        mcpClients.
-            forEach { client ->
-
-                log.info("serverInfo : {} , tools : {} ", client.serverInfo, client.listTools())
-            }
-
-        return mcpClients.map { it.listTools() }
-    }
 
     companion object {
         private val log: Logger = LoggerFactory
-            .getLogger(PersonController::class.java)
+            .getLogger(ChatsController::class.java)
     }
 }
