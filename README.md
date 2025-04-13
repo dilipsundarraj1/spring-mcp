@@ -19,7 +19,9 @@
 
 ## Create a Tool using SpringAI — Exposing the RESTAPI Endpoints as a tools via MCP
 
-### Product Service exposes bunch of REST APIs to retrieve the product details.
+### Product Service exposes a bunch of REST APIs to retrieve the product details.
+
+- In this example, we have these two endpoints that this services exposes.
 
 ```kotlin
 
@@ -57,6 +59,8 @@ class ProductController(private val productService: ProductService) {
 ```
 
 ### Transforming these endpoints as Tools using MCP in Spring AI
+
+- There are handy annotations available in Spring AI module to turn any function into a tool using the below annotations.
 
 #### @Tool and ToolParam Annotation
 
@@ -145,7 +149,7 @@ spring:
 
 ### MCP Server Tools API: Exposing Available Tools in the MCP Server
 
-- All the tools that are available in the MCP Server are available as part of the **ToolCallbackProvider**.
+- All the tools that are available in the MCP Server are available as part of the **ToolCallbackProvider** Spring bean.
 - So in here we can access it and expose it as a REST API.
 
 ```kotlin
@@ -170,7 +174,6 @@ data class Tools(
 )
 
 ```
-
 
 ## Create a Tool using SpringAI — Exposing the DB functions as a tool
 
