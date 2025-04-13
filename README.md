@@ -58,7 +58,7 @@ class ProductController(private val productService: ProductService) {
 }
 ```
 
-### Transforming these endpoints as Tools using MCP in Spring AI
+### How to transform these endpoints as Tools using MCP in Spring AI ?
 
 - There are handy annotations available in Spring AI module to turn any function into a tool using the below annotations.
 
