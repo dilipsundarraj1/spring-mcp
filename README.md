@@ -1,21 +1,29 @@
 <!-- TOC -->
 * [MCP in SpringBoot](#mcp-in-springboot)
-* [MCP Server using WebMVC](#mcp-server-using-webmvc)
+* [MCP Server using SpringAI - WebMVC](#mcp-server-using-springai---webmvc)
   * [Create a Tool using SpringAI — Exposing the RESTAPI Endpoints as a tools via MCP](#create-a-tool-using-springai--exposing-the-restapi-endpoints-as-a-tools-via-mcp)
-    * [Product Service exposes bunch of REST APIs to retrieve the product details.](#product-service-exposes-bunch-of-rest-apis-to-retrieve-the-product-details)
-    * [Transforming these endpoints as Tools using MCP in Spring AI](#transforming-these-endpoints-as-tools-using-mcp-in-spring-ai)
+    * [Product Service exposes a bunch of REST APIs to retrieve the product details.](#product-service-exposes-a-bunch-of-rest-apis-to-retrieve-the-product-details)
+    * [How to transform these endpoints as Tools using MCP in Spring AI ?](#how-to-transform-these-endpoints-as-tools-using-mcp-in-spring-ai-)
       * [@Tool and ToolParam Annotation](#tool-and-toolparam-annotation)
     * [Register the tools into the Spring Context](#register-the-tools-into-the-spring-context)
-  * [MCP Server Tools API: Exposing Available Tools in the MCP Server](#mcp-server-tools-api-exposing-available-tools-in-the-mcp-server)
-  * [Create a Tool using SpringAI — Exposing the DB Interaction as a tool](#create-a-tool-using-springai--exposing-the-db-interaction-as-a-tool)
+    * [application.yml—Config to run the MCP Server](#applicationymlconfig-to-run-the-mcp-server)
+    * [MCP Server Tools API: Exposing Available Tools in the MCP Server](#mcp-server-tools-api-exposing-available-tools-in-the-mcp-server)
+  * [Create a Tool using SpringAI — Exposing the DB functions as a tool](#create-a-tool-using-springai--exposing-the-db-functions-as-a-tool)
       * [@Tool and ToolParam Annotation](#tool-and-toolparam-annotation-1)
     * [Register the tool into the Spring Context](#register-the-tool-into-the-spring-context)
-      * [Explanation](#explanation)
+    * [Code Reference](#code-reference)
+  * [MCP Client using SpringAI - WebMVC](#mcp-client-using-springai---webmvc)
+    * [application.yml - Config to enable the MCP Client](#applicationyml---config-to-enable-the-mcp-client)
+    * [application.yml - Config Properties](#applicationyml---config-properties)
+    * [Configuring MCP Servers into the App](#configuring-mcp-servers-into-the-app)
+    * [Invoking the LLM by passing the tools.](#invoking-the-llm-by-passing-the-tools)
+    * [Code Reference](#code-reference-1)
 <!-- TOC -->
 
 # MCP in SpringBoot
 
-# MCP Server using WebMVC
+# MCP Server using SpringAI - WebMVC
+
 
 ## Create a Tool using SpringAI — Exposing the RESTAPI Endpoints as a tools via MCP
 
@@ -147,6 +155,11 @@ spring:
 
 - More info about properties is available in this link: [Spring MCP Server Config](https://docs.spring.io/spring-ai/reference/api/mcp/mcp-server-boot-starter-docs.html#_configuration_properties)
 
+### Start the MCP Server
+- The MCP server is a Spring Boot application and can be started like any other Spring Boot application.
+[Start MCPServer](mcp-webmvc/mcp-server/src/main/kotlin/com/llm/MCPServer.kt)
+
+
 ### MCP Server Tools API: Exposing Available Tools in the MCP Server
 
 - All the tools that are available in the MCP Server are available as part of the **ToolCallbackProvider** Spring bean.
@@ -233,3 +246,101 @@ class ToolConfig {
 }
 ```
 [Reference - Tool Config](mcp-webmvc/mcp-server/src/main/kotlin/com/llm/config/ToolConfig.kt)
+
+### Code Reference
+[MCP Server using Spring AI](mcp-webmvc/mcp-server)
+
+## MCP Client using SpringAI - WebMVC
+
+- The MCP Client is used to connect to the MCP Server and retrieve the tools that are available in the server.
+- It can also invoke the tools if there a tool can fulfill the user query.
+
+### application.yml - Config to enable the MCP Client
+
+```yaml
+spring:
+  ai:
+    mcp:
+      client:
+        enabled: true
+        type: SYNC
+        initialized: true
+        request-timeout: 240s
+        sse:
+          connections:
+            person-mcp-server:
+              url: http://localhost:8085
+    openai:
+      api-key: ${OPENAI_KEY}
+      chat:
+        enabled: true # By default, it's true, this triggers the autoconfiguration.
+        options:
+          model: gpt-4o
+          temperature: 0.7
+          max_completion_tokens: 2000
+          internal-tool-execution-enabled: true
+```
+### application.yml - Config Properties
+
+-  **SYNC** - The client is configured to use synchronous communication with the MCP server.
+-  **initialized** - The client is initialized to connect to the MCP server.
+- **sse.connections:**
+  - This app can connect to multiple MCP Servers and the connection name is used to identify the server.
+
+- More info about properties is available in this link: [Spring MCP Client Config](https://docs.spring.io/spring-ai/reference/api/mcp/mcp-client-boot-starter-docs.html#_configuration_properties)
+
+### Configuring MCP Servers into the App
+
+```kotlin
+
+@RestController
+class ChatsController(
+    chatClientBuilder: ChatClient.Builder,
+    mcpClients: List<McpSyncClient>
+) {
+
+    private val chatClient: ChatClient = chatClientBuilder
+        .defaultTools(SyncMcpToolCallbackProvider(mcpClients))
+        .build()
+
+}
+
+```
+
+- ChatClient
+  -  This is the main client that is used to connect to the MCP server and retrieve the tools that are available in the server.
+  - This will invoke the tool if the user prompt requires a tool invocation to get the result.
+- defaultTools
+  -  This method is used to set the default tools that are available in the MCP server.
+- McpSyncClient
+  - This instance holds the MCP server connection and is used to connect to the MCP server.
+
+### Invoking the LLM by passing the tools.
+
+- Using the **chatClient** , we can invoke the LLM by passing the tools that are available in the MCP server.
+- If a specific call requires a tool invocation, the LLM will invoke the tool and return the result.
+
+```kotlin
+
+@PostMapping("/v1/chats")
+    fun chat(@RequestBody @Valid userInput: UserInput): String? {
+        log.info("userInput message : {} ", userInput)
+        val requestSpec: ChatClient.ChatClientRequestSpec =
+            chatClient.prompt()
+                .user(userInput.prompt)
+
+        log.info("requestSpec : {} ", requestSpec)
+        val responseSpec = requestSpec.call()
+        log.info("responseSpec1 : {} ", responseSpec)
+        log.info("content : {} ", responseSpec.content())
+        return responseSpec.content()
+    }
+```
+
+### Start the MCP Client
+- The MCP Clent is a Spring Boot application and can be started like any other Spring Boot application.
+  [Start MCPClient](mcp-webmvc/mcp-client/src/main/kotlin/com/llm/MCPClient.kt)
+
+
+### Code Reference
+[MCP Client using Spring AI](mcp-webmvc/mcp-client)

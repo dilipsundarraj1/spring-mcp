@@ -13,8 +13,8 @@ import javax.validation.Valid
 
 @RestController
 class ChatsController(
-    private val chatClientBuilder: ChatClient.Builder,
-    private val mcpClients: List<McpSyncClient>
+    chatClientBuilder: ChatClient.Builder,
+    mcpClients: List<McpSyncClient>
 ) {
 
     private val chatClient: ChatClient = chatClientBuilder

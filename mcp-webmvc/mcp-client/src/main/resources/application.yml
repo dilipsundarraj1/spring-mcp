@@ -24,6 +24,3 @@ spring:
           max_completion_tokens: 2000
           internal-tool-execution-enabled: true
   autoconfigure:
-#    exclude: org.springframework.ai.autoconfigure.mcp.client.SseHttpClientTransportAutoConfiguration
-  main:
-    banner-mode: off
