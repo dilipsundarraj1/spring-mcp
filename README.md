@@ -7,16 +7,18 @@
       * [@Tool and ToolParam Annotation](#tool-and-toolparam-annotation)
     * [Register the tools into the Spring Context](#register-the-tools-into-the-spring-context)
     * [application.yml—Config to run the MCP Server](#applicationymlconfig-to-run-the-mcp-server)
+    * [Start the MCP Server](#start-the-mcp-server)
     * [MCP Server Tools API: Exposing Available Tools in the MCP Server](#mcp-server-tools-api-exposing-available-tools-in-the-mcp-server)
   * [Create a Tool using SpringAI — Exposing the DB functions as a tool](#create-a-tool-using-springai--exposing-the-db-functions-as-a-tool)
       * [@Tool and ToolParam Annotation](#tool-and-toolparam-annotation-1)
     * [Register the tool into the Spring Context](#register-the-tool-into-the-spring-context)
     * [Code Reference](#code-reference)
-  * [MCP Client using SpringAI - WebMVC](#mcp-client-using-springai---webmvc)
+* [MCP Client using SpringAI - WebMVC](#mcp-client-using-springai---webmvc)
     * [application.yml - Config to enable the MCP Client](#applicationyml---config-to-enable-the-mcp-client)
     * [application.yml - Config Properties](#applicationyml---config-properties)
     * [Configuring MCP Servers into the App](#configuring-mcp-servers-into-the-app)
     * [Invoking the LLM by passing the tools.](#invoking-the-llm-by-passing-the-tools)
+    * [Start the MCP Client](#start-the-mcp-client)
     * [Code Reference](#code-reference-1)
 <!-- TOC -->
 
@@ -250,7 +252,7 @@ class ToolConfig {
 ### Code Reference
 [MCP Server using Spring AI](mcp-webmvc/mcp-server)
 
-## MCP Client using SpringAI - WebMVC
+# MCP Client using SpringAI - WebMVC
 
 - The MCP Client is used to connect to the MCP Server and retrieve the tools that are available in the server.
 - It can also invoke the tools if there a tool can fulfill the user query.
