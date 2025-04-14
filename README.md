@@ -1,5 +1,5 @@
 <!-- TOC -->
-* [MCP in SpringBoot](#mcp-in-springboot)
+* [MCP using SpringBoot](#mcp-using-springboot)
 * [MCP Server using SpringAI - WebMVC](#mcp-server-using-springai---webmvc)
   * [Create a Tool using SpringAI — Exposing the RESTAPI Endpoints as a tools via MCP](#create-a-tool-using-springai--exposing-the-restapi-endpoints-as-a-tools-via-mcp)
     * [Product Service exposes a bunch of REST APIs to retrieve the product details.](#product-service-exposes-a-bunch-of-rest-apis-to-retrieve-the-product-details)
@@ -22,7 +22,7 @@
     * [Code Reference](#code-reference-1)
 <!-- TOC -->
 
-# MCP in SpringBoot
+# MCP using SpringBoot
 
 # MCP Server using SpringAI - WebMVC
 
